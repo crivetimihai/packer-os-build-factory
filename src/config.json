@@ -12,8 +12,8 @@
 
   "vm_ssh_user": "vagrant",
   "vm_ssh_pass": "vagrant",
-  "vm_ssh_timeout": "20m",
-  "boot_wait_time": "5s",
+  "vm_ssh_timeout": "60m",
+  "boot_wait_time": "10s",
   "http_dir": "http",
   "shutdown_command": "sudo systemctl poweroff",
 
