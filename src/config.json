@@ -8,7 +8,7 @@
   "vm_memory": "2048",
   "vm_cpus": "2",
   "headless": "false",
-  "keep_registered": "true",
+  "keep_registered": "false",
 
   "vm_ssh_user": "vagrant",
   "vm_ssh_pass": "vagrant",

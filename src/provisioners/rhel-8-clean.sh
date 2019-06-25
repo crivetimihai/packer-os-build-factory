@@ -5,7 +5,6 @@ sed -i 's/rhgb quiet/net.ifnames=0/' /etc/default/grub
 
 # Disable SELinux
 sed -i -e 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
-sed -i -e 's/#UseDNS yes/UseDNS no/' /etc/ssh/sshd_config
 
 # Config
 echo "LANG=en_US.utf-8" >> /etc/environment
