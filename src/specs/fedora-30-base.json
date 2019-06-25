@@ -10,9 +10,9 @@
     "vagrantfile_template": "files/fedora-30-base-vagrantfile",
     "playbook_file": "ansible/rhel-8-base-main.yml",
     "galaxy_file": "ansible/rhel-8-base-requirements.yml",
-    "install_ansible_script": "provisioners/{{user `vm_name`}}-install-ansible.sh",
     "clean_script": "provisioners/{{user `vm_name`}}-clean.sh",
 
+    "install_ansible_script": "provisioners/install-ansible.sh",
     "vm_version": "1.0",
     "vm_description": "{{user `vm_name`}} {{split build_type \"-\" 0}} {{timestamp}} by {{user `vm_author`}}"
   },

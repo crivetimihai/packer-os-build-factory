@@ -1,16 +1,17 @@
 {
   "variables": {
-    "vm_name": "centos-7-base",
-    "iso_local_url": "{{env `ISO_DIR`}}/CentOS-7-x86_64-DVD-1810.iso",
-    "iso_download_url": "http://mozart.ee.ic.ac.uk/CentOS/7.6.1810/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso",
-    "iso_sha256": "6d44331cc4f6c506c7bbe9feb8468fad6c51a88ca1393ca6b8b486ea04bec3c1",
+    "vm_name": "ubuntu-18.04-base",
+    "iso_local_url": "{{env `ISO_DIR`}}/ubuntu-18.04.2-server-amd64.iso",
+    "iso_download_url": "http://cdimage.ubuntu.com/ubuntu/releases/bionic/release/ubuntu-18.04.2-server-amd64.iso",
+    "iso_sha256": "a2cb36dc010d98ad9253ea5ad5a07fd6b409e3412c48f1860536970b073c98f5",
 
-    "vbox_guest_os_type": "RedHat_64",
-    "vmware_guest_os_type": "rhel7-64",
-    "vagrantfile_template": "files/centos-7-base-vagrantfile",
+    "vbox_guest_os_type": "Ubuntu_64",
+    "vmware_guest_os_type": "ubuntu-64",
+    "vagrantfile_template": "files/rhel-8-base-vagrantfile",
     "playbook_file": "ansible/rhel-8-base-main.yml",
     "galaxy_file": "ansible/rhel-8-base-requirements.yml",
     "clean_script": "provisioners/{{user `vm_name`}}-clean.sh",
+    "post_script": "provisioners/{{user `vm_name`}}-post.sh",
 
     "install_ansible_script": "provisioners/install-ansible.sh",
     "vm_version": "1.0",
@@ -56,8 +57,28 @@
       ],
 
       "boot_command": [
-        "<up><wait><tab>",
-        " text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `vm_name`}}.cfg net.ifnames=0",
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz",
+        " auto=true",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US",
+        " fb=false",
+        " initrd=/install/initrd.gz",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US",
+        " netcfg/get_domain=vm",
+        " netcfg/get_hostname=vagrant",
+        " grub-installer/bootdev=/dev/sda",
+        " noapic",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-18.04-base.cfg",
+        " -- <wait>",
         "<enter><wait>"
       ],
 
@@ -101,8 +122,28 @@
       },
 
       "boot_command": [
-        "<up><wait><tab>",
-        " text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `vm_name`}}.cfg net.ifnames=0",
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz",
+        " auto=true",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US",
+        " fb=false",
+        " initrd=/install/initrd.gz",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US",
+        " netcfg/get_domain=vm",
+        " netcfg/get_hostname=vagrant",
+        " grub-installer/bootdev=/dev/sda",
+        " noapic",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-18.04-base.cfg",
+        " -- <wait>",
         "<enter><wait>"
       ],
 
@@ -133,8 +174,28 @@
       "net_device": "virtio-net",
 
       "boot_command": [
-        "<up><wait><tab>",
-        " text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `vm_name`}}.cfg net.ifnames=0",
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz",
+        " auto=true",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US",
+        " fb=false",
+        " initrd=/install/initrd.gz",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US",
+        " netcfg/get_domain=vm",
+        " netcfg/get_hostname=vagrant",
+        " grub-installer/bootdev=/dev/sda",
+        " noapic",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu-18.04-base.cfg",
+        " -- <wait>",
         "<enter><wait>"
       ],
 
@@ -156,6 +217,11 @@
   ],
 
   "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "{{user `post_script`}}"
+    },
     {
       "type": "shell",
       "only": ["virtualbox-iso"],

@@ -16,7 +16,7 @@ export PACKER_CACHE_DIR=../builds/.packer_cache
 export PACKER_KEY_INTERVAL=10ms
 
 # What to build. Change to null to debug. Supports: virtualbox-iso,vmware-iso, qemu
-export BUILDS_ONLY=virtualbox-iso
+export BUILDS_ONLY=vmware-iso
 
 
 .DEFAULT_GOAL :=rhel-8-base
@@ -60,7 +60,7 @@ alpine-3.10-base:
 	$(VAGRANT) box add --name $@ $(BUILDS_DIR)/$@/$@.box | tee -a $(LOG_DIR)/$@.log
 	$(VAGRANT) box list | tee -a $(LOG_DIR)/$@.log
 
-# [X] Ubuntu 18.04 Server
+# [ ] Ubuntu 18.04 Server
 ubuntu-18.04-base:
 	$(PACKER) inspect $(SPECS_DIR)/$@.json | tee -a $(LOG_DIR)/$@.log
 	$(PACKER) build -only=$(BUILDS_ONLY) -on-error=ask -var-file=config.json -force $(SPECS_DIR)/$@.json | tee -a $(LOG_DIR)/$@.log
@@ -69,7 +69,7 @@ ubuntu-18.04-base:
 	$(VAGRANT) box list | tee -a $(LOG_DIR)/$@.log
 
 
-# [X] Debian
+# [ ] Debian
 debian-9.9-base:
 	$(PACKER) inspect $(SPECS_DIR)/$@.json | tee -a $(LOG_DIR)/$@.log
 	$(PACKER) build -only=$(BUILDS_ONLY) -on-error=ask -var-file=config.json -force $(SPECS_DIR)/$@.json | tee -a $(LOG_DIR)/$@.log

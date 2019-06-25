@@ -1,16 +1,17 @@
 {
   "variables": {
-    "vm_name": "centos-7-base",
-    "iso_local_url": "{{env `ISO_DIR`}}/CentOS-7-x86_64-DVD-1810.iso",
-    "iso_download_url": "http://mozart.ee.ic.ac.uk/CentOS/7.6.1810/isos/x86_64/CentOS-7-x86_64-DVD-1810.iso",
-    "iso_sha256": "6d44331cc4f6c506c7bbe9feb8468fad6c51a88ca1393ca6b8b486ea04bec3c1",
+    "vm_name": "debian-9.9-base",  
+    "iso_local_url": "{{env `ISO_DIR`}}/debian-9.9.0-amd64-DVD-1.iso",
+    "iso_download_url": "https://cdimage.debian.org/cdimage/release/current/amd64/iso-dvd/debian-9.9.0-amd64-DVD-1.iso",
+    "iso_sha256": "48462d8c0cc755064f7e25b61c5ccd75684f1562524a0850d98093f17afef495",
 
-    "vbox_guest_os_type": "RedHat_64",
-    "vmware_guest_os_type": "rhel7-64",
-    "vagrantfile_template": "files/centos-7-base-vagrantfile",
+    "vbox_guest_os_type": "Ubuntu_64",
+    "vmware_guest_os_type": "ubuntu-64",
+    "vagrantfile_template": "files/rhel-8-base-vagrantfile",
     "playbook_file": "ansible/rhel-8-base-main.yml",
     "galaxy_file": "ansible/rhel-8-base-requirements.yml",
     "clean_script": "provisioners/{{user `vm_name`}}-clean.sh",
+    "post_script": "provisioners/{{user `vm_name`}}-post.sh",
 
     "install_ansible_script": "provisioners/install-ansible.sh",
     "vm_version": "1.0",
@@ -56,9 +57,22 @@
       ],
 
       "boot_command": [
-        "<up><wait><tab>",
-        " text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `vm_name`}}.cfg net.ifnames=0",
-        "<enter><wait>"
+        "<esc><wait>",
+        "install",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-9.9-base.cfg<wait>",
+        " debian-installer=en_US.UTF-8<wait>",
+        " auto<wait>",
+        " locale=en_US.UTF-8<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/xkb-keymap=us<wait>",
+        " netcfg/get_hostname={{ .Name }}<wait>",
+        " netcfg/get_domain=vagrantup.com<wait>",
+        " fb=false<wait>",
+        " debconf/frontend=noninteractive<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-keymaps-at/keymap=us<wait>",
+        " grub-installer/bootdev=/dev/sda<wait>",
+        " <enter><wait>"
       ],
 
       "vm_name": "{{split build_type \"-\" 0}}-{{user `vm_name`}}",
@@ -101,9 +115,22 @@
       },
 
       "boot_command": [
-        "<up><wait><tab>",
-        " text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `vm_name`}}.cfg net.ifnames=0",
-        "<enter><wait>"
+        "<esc><wait>",
+        "install",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-9.9-base.cfg<wait>",
+        " debian-installer=en_US.UTF-8<wait>",
+        " auto<wait>",
+        " locale=en_US.UTF-8<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/xkb-keymap=us<wait>",
+        " netcfg/get_hostname={{ .Name }}<wait>",
+        " netcfg/get_domain=vagrantup.com<wait>",
+        " fb=false<wait>",
+        " debconf/frontend=noninteractive<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-keymaps-at/keymap=us<wait>",
+        " grub-installer/bootdev=/dev/sda<wait>",
+        " <enter><wait>"
       ],
 
       "vm_name": "{{split build_type \"-\" 0}}-{{user `vm_name`}}",
@@ -133,9 +160,22 @@
       "net_device": "virtio-net",
 
       "boot_command": [
-        "<up><wait><tab>",
-        " text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/{{user `vm_name`}}.cfg net.ifnames=0",
-        "<enter><wait>"
+        "<esc><wait>",
+        "install",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/debian-9.9-base.cfg<wait>",
+        " debian-installer=en_US.UTF-8<wait>",
+        " auto<wait>",
+        " locale=en_US.UTF-8<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/xkb-keymap=us<wait>",
+        " netcfg/get_hostname={{ .Name }}<wait>",
+        " netcfg/get_domain=vagrantup.com<wait>",
+        " fb=false<wait>",
+        " debconf/frontend=noninteractive<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-keymaps-at/keymap=us<wait>",
+        " grub-installer/bootdev=/dev/sda<wait>",
+        " <enter><wait>"
       ],
 
       "vm_name": "{{split build_type \"-\" 0}}-{{user `vm_name`}}",
@@ -156,6 +196,11 @@
   ],
 
   "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "{{user `post_script`}}"
+    },
     {
       "type": "shell",
       "only": ["virtualbox-iso"],
