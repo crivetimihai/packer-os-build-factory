@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "rhel8"
+  config.vm.box = "rhel-8-base"
   config.vm.hostname = "rhel8.lab.local"
   # Pick a private IP that won't conflict with your network
   config.vm.network "private_network", ip: "172.16.6.2"
@@ -20,11 +20,11 @@ Vagrant.configure("2") do |config|
      #vm.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
   end
 
-  config.vm.synced_folder "../../", "/ansible", mount_options: ["ro"]
+  config.vm.synced_folder "../../ansible", "/ansible", mount_options: ["ro"]
   #config.vm.provision "shell", path: "bootstrap.sh"
 
-  config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "/ansible/ansible/playbook.yml"
-  end
+  #config.vm.provision "ansible_local" do |ansible|
+  #    ansible.playbook = "/ansible/playbook.yml"
+  #end
 end
 
