@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
   config.vm.box = "rhel-8-base"
-  config.vm.hostname = "rhel8.lab.local"
+  config.vm.hostname = "rhel-8.lab.local"
   # Pick a private IP that won't conflict with your network
   config.vm.network "private_network", ip: "172.16.6.2"
 
