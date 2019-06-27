@@ -158,6 +158,15 @@
   "provisioners": [
     {
       "type": "shell",
+      "script": "{{user `install_ansible_script`}}"
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "{{user `playbook_file`}}",
+      "galaxy_file": "{{user `galaxy_file`}}"
+    },
+    {
+      "type": "shell",
       "only": ["virtualbox-iso"],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
       "script": "provisioners/vbox.sh"
@@ -167,15 +176,6 @@
       "only": ["vmware-iso"],
       "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
       "script": "provisioners/vmware.sh"
-    },
-    {
-      "type": "shell",
-      "script": "{{user `install_ansible_script`}}"
-    },
-    {
-      "type": "ansible-local",
-      "playbook_file": "{{user `playbook_file`}}",
-      "galaxy_file": "{{user `galaxy_file`}}"
     },
     {
       "type": "shell",
